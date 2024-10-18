@@ -1,4 +1,5 @@
 // OJ Problem Set 3 : High precision multiplication
+// 修改优化后的最终版。尽量简化了循环，删去了不必要的判定代码
 #include <stdio.h>
 #include <string.h>
 # define num 500 // 注意此处的字符串长度必须不小于500，否则在后面会出现溢出（checkpoint4）
@@ -98,6 +99,7 @@ int main(void)
             // 利用int强制转换char的数字元素，结合ASCII表规律得到正确的整数值
             long long int x = ((int)a[i] - '0') * ((int)b[j] - '0'); 
             // 注意，此处我把数字【反着】存进了整数列表c，也就是位数大的数字反而存在后面，位数小的存在前面
+            // 这样做，实际上顺便可以处理 输入的a,b前面带0的情况
             c[na + nb - i - j -2] += x; 
         }
     }
@@ -140,7 +142,8 @@ int main(void)
     }
     else
     {   
-        // 如果没有小数点，就把代表 小数点前有几位 的dota和dotb改成a和b的长度
+        // 如果a,b中的某个数没有小数点，就把代表 小数点前有几位 的dota和dotb改成a和b的长度
+        // 这么做的原因是：如果没有这一步，计算小数乘整数时会出错
         if (!dota)
         dota = na;
         if (!dotb)
